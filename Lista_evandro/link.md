@@ -1,0 +1,1 @@
+https://evandro-crr.github.io/alg2/listas/2_lista.pdf
