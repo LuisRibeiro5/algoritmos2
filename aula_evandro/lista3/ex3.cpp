@@ -9,11 +9,14 @@ struct Refrigerante {
 void cadastraRefrigerante(Refrigerante &);
 int recebeQtdeRefri();
 void exibeRefrisDisponivel(Refrigerante[], int);
-void compraRefrigerante(Refrigerante[],int);
+double compraRefrigerante(Refrigerante[],int);
 int recebeCodigoDoRefri(int);
 double recebeDinheiroPagamento();
 bool temRefriDisponivel(Refrigerante&);
 bool verificaPagamentoSuficiente(Refrigerante&, double);
+void retiraRefriDoEstoque(Refrigerante&);
+void daOTroco(Refrigerante&, double);
+bool desejaParar();
 
 int main(){
     int qtdeRefri = recebeQtdeRefri();
@@ -28,13 +31,14 @@ int main(){
         std::cout << "preco: " << refrigerantes[i].preco << "\n";
         std::cout << "qtde: " << refrigerantes[i].qtde << "\n";
     }
-
+    double totalArrecadado = 0;
     while(true){
         std::cout << "refrigerantes disponiveis: \n";
         exibeRefrisDisponivel(refrigerantes, qtdeRefri);
-
-        
-        break;
+        totalArrecadado += compraRefrigerante(refrigerantes,qtdeRefri);
+        if(desejaParar()){
+            break;
+        }
     }
 
     return 0;
@@ -65,35 +69,33 @@ int recebeQtdeRefri(){
         std::cout << "Maximo a ser cadastrado é 5!\n";
         std::cout << "quantidade: ";
         std::cin >> qtde;
-    }while(qtde <= 0);
+    }while(qtde <= 0 or qtde > 5);
     return qtde;
 };
 
 void exibeRefrisDisponivel(Refrigerante refris[], int tamanho){
     for(int i = 0; i < tamanho; i++ ){
         if(refris[i].qtde > 0){
-            std::cout << [i] << "-" << refris[i].nome << " - " << refris[i].qtde << "\n";
+            std::cout << i+1 << "-" << refris[i].nome << " - " << refris[i].qtde << "\n";
         } else {
             std::cout << refris[i].nome << "- indisponivel.\n";
         }
     }
 };
 
-void compraRefrigerante(Refrigerante refris[],int refrisExistentes){
+double compraRefrigerante(Refrigerante refris[],int refrisExistentes){
     int codigo = recebeCodigoDoRefri(refrisExistentes);
     double dinheiroPagamento = recebeDinheiroPagamento();
 
     bool temRefri = temRefriDisponivel(refris[codigo]);
     if(temRefri){
-        bool pagamentoESuficiente = verificaPagamentoSuficiente(refris[codigo], dinheiroPagamento)
-    }
-   for(int i = 0; i < refrisExistentes; i++){
-    if(i == codigo){
-        if(refris[i].preco > dinheiroPagamento){
-            std::cout << "Saldo insuficiente para comprar o refri!\n";
+        bool pagamentoESuficiente = verificaPagamentoSuficiente(refris[codigo], dinheiroPagamento);
+        if(pagamentoESuficiente){
+            retiraRefriDoEstoque(refris[codigo]);
+            daOTroco(refris[codigo], dinheiroPagamento);
+            return refris[codigo].preco;
         }
     }
-   }
     
 };
 
@@ -104,7 +106,7 @@ int recebeCodigoDoRefri(int refrisExistentes){
     do{
         std::cout << "digite o codigo, de 1 á " << refrisExistentes << ": "; 
         std::cin >> codigo;
-    }while(codigo < 1 or codigo > refrisExistentes)
+    }while(codigo < 1 or codigo > refrisExistentes);
 
     return --codigo;
 };
@@ -115,7 +117,7 @@ double recebeDinheiroPagamento(){
     do{
         std::cout << "insira um valor maior que 0: ";
         std::cin >> valor;
-    }while(valor <= 0)
+    }while(valor <= 0 or valor > 10);
 
     return valor;
 };
@@ -130,6 +132,35 @@ bool temRefriDisponivel(Refrigerante& refri){
 
 }
 
-bool verificaPagamentoSuficiente(Refrigerante&, double){
-    
+bool verificaPagamentoSuficiente(Refrigerante& refri, double pagamento){
+    if(refri.preco > pagamento){
+        std::cout << "Valor de pagamento insuficiente\n";
+        return false;
+    }else{
+        return true;
+    }
 };
+
+void retiraRefriDoEstoque(Refrigerante& refri){
+    std::cout << "Compra aceita com sucesso!!\n";
+    refri.qtde -= 1;
+};
+
+void daOTroco(Refrigerante& refri, double pagamento){
+    std::cout << "Aqui esta seu troco: R$" << pagamento - refri.preco << "\n";
+};
+
+bool desejaParar(){
+    char resp;
+    std::cout << "Deseja realizar mais uma compra? S/N: \n";
+    do{
+        std::cout << "Resposta: ";
+        std::cin >> resp;
+    }while(resp != 'S' && resp != 'N');
+
+    if(resp == 'S'){
+        return true;
+    }else {
+        return false;
+    }
+}
