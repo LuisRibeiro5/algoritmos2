@@ -152,10 +152,11 @@ void daOTroco(Refrigerante& refri, double pagamento){
 
 bool desejaParar(){
     char resp;
-    std::cout << "Deseja realizar mais uma compra? S/N: \n";
+    std::cout << "Deseja parar? S/N: \n";
     do{
         std::cout << "Resposta: ";
         std::cin >> resp;
+        resp = toupper(resp);
     }while(resp != 'S' && resp != 'N');
 
     if(resp == 'S'){
