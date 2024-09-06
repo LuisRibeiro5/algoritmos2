@@ -11,9 +11,9 @@ float leNumRealPositivo(char[]);
 float FahrParaCelsius(float);
 
 int main(){
-    float polegadas = leNumRealPositivo(" digite uma medida em polegadas: \n")
-    std::cout << "Conversao para centimetros: "<< convertePolCm(polegadas):2 << "centimetros\n";
-    float fahrenheit = leNumRealPositivo("digite uma medida em fahrenheit: \n")
+    float polegadas = leNumRealPositivo(" digite uma medida em polegadas: \n");
+    std::cout << "Conversao para centimetros: "<< convertePolCm(polegadas) << "centimetros\n";
+    float fahrenheit = leNumRealPositivo("digite uma medida em fahrenheit: \n");
     std::cout << "Conversao para celcius: " << FahrParaCelsius(fahrenheit);
     return 0;   
 }
@@ -27,11 +27,11 @@ float leNumRealPositivo(char frase[]){
     float num;
     do
     {
-        cin >> num;
+        std::cin >> num;
     } while (num < 0);
     return num;
 };
 
 float FahrParaCelsius(float fahr){
-    return 5/9.0 * (fahr - 32)
+    return 5/9.0 * (fahr - 32);
 };
