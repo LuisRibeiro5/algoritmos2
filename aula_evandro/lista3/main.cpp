@@ -13,27 +13,34 @@ struct ContaDeCliente {
 
 void mostra_menu_de_opcoes();
 unsigned int recebe_opcao_valida();
-void adiciona_nova_conta(ContaDeCliente&);
+
+void adiciona_nova_conta(ContaDeCliente[], int);
 std::string recebe_nome_valido();
 std::string recebe_cpf_valido();
 void recebe_endereco_valido(std::string [], int = 3);
 std::string recebe_telefone_valido();
 double recebe_saldo_valido();
 
+void mostra_clientes_cpf(ContaDeCliente[], int);
+ContaDeCliente* encontra_cliente_por_cpf(ContaDeCliente[],int,std::string);
+
+void remove_conta_cliente(ContaDeCliente[]);
+
+void lista_contas_cadastradas(ContaDeCliente[], int);
+
 const int TAM = 10;
 #ifdef TESTE
 //bloco para testes
 int main(){
     // mostra_menu_de_opcoes();
-    int opcao = recebe_opcao_valida();
-    std::string telefone = recebe_telefone_valido();
-    std::cout << "\n" << telefone << "\n";
+    
 }
 #else
 //bloco principal
 int main(){
     ContaDeCliente clientes[TAM]={""};
     int numContas = 0;
+    std::string cpf_remover;
 
     mostra_menu_de_opcoes();
     int opcao = recebe_opcao_valida();
@@ -41,15 +48,28 @@ int main(){
     switch (opcao)
     {
     case 1:
-        adiciona_nova_conta(clientes[numContas]);
-        numContas++;
+        if(numContas < 10){
+            adiciona_nova_conta(clientes, TAM);
+            numContas++;
+        }else{
+            std::cout << "Numero máximo de contas criadas atingido.\n";
+        }
         break;
     case 2:
-        //remove_conta_cliente
-        numContas--;
+        mostra_clientes_cpf(clientes, TAM);
+
+        std::cout << "digite o cpf da conta que deseja remover.\n";
+        cpf_remover = recebe_cpf_valido();
+        auto cliente = encontra_cliente_por_cpf(clientes,TAM,cpf_remover);
+        if(cliente != nullptr){
+            remove_conta_cliente(cliente);
+            numContas--;
+        }else{
+            std::cout << "Cliente inexistente.\n";
+        }
         break;
     case 3:
-        //lista_contas_cadastradas
+        lista_contas_cadastradas();
         break;
     case 4:
         //imprime_conta_específica
@@ -85,13 +105,19 @@ unsigned int recebe_opcao_valida(){
     return opcao;
 }
 
-void adiciona_nova_conta(ContaDeCliente& cliente){
-    std::cout << "Digite as informacoes do cliente:\n";
-    cliente.nome = recebe_nome_valido();
-    cliente.cpf = recebe_cpf_valido();
-    recebe_endereco_valido(cliente.endereco);
-    cliente.telefone = recebe_telefone_valido();
-    cliente.saldo = recebe_saldo_valido();
+void adiciona_nova_conta(ContaDeCliente clientes[], int tamanho){
+    for (int i = 0; i < tamanho; i++)
+    {
+        if(clientes[i].nome == ""){
+            std::cout << "Digite as informacoes do cliente:\n";
+        clientes[i].nome = recebe_nome_valido();
+        clientes[i].cpf = recebe_cpf_valido();
+        recebe_endereco_valido(clientes[i].endereco);
+        clientes[i].telefone = recebe_telefone_valido();
+        clientes[i].saldo = recebe_saldo_valido();
+        }
+    }
+    
     
 };
 
@@ -212,4 +238,46 @@ double recebe_saldo_valido(){
     } while (saldo < 0);
     
     return saldo;
+};
+
+void mostra_clientes_cpf(ContaDeCliente clientes[], int tamanho){
+    for(int i = 0; i < tamanho; i++){
+        if(clientes[i].nome.size() > 0){
+            std::cout << clientes[i].nome << " - " << clientes[i].cpf << "\n";
+        }
+    }
+};
+
+void remove_conta_cliente(ContaDeCliente &cliente){
+    cliente.nome = "";
+    cliente.telefone = "";
+    cliente.saldo = 0;
+    cliente.endereco[0] = "";
+    cliente.endereco[1] = "";
+    cliente.endereco[2] = "";
+};
+
+ContaDeCliente* encontra_cliente_por_cpf(ContaDeCliente clientes[],int tamanho,std::string cpf_encontra){
+    for (int i = 0; i < tamanho; i++)
+    {
+        if(clientes[i].cpf == cpf_encontra){
+            return &clientes[i];
+        }
+    }
+    return nullptr;
+};
+
+void lista_contas_cadastradas(ContaDeCliente clientes[], int tamanho){
+    for (int i = 0; i < tamanho; i++)
+    {
+        std::cout << clientes[i].nome;
+        std::cout << clientes[i].cpf;
+        std::cout << clientes[i].telefone;
+        std::cout << clientes[i].endereco[0] << " - " 
+                  << clientes[i].endereco[1] << " - " 
+                  << clientes[i].endereco[3] << " - " ;
+        std::cout << clientes[i].saldo;
+        std::cout << "----------------------------------"
+    }
+    
 };
