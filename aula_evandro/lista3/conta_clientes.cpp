@@ -56,6 +56,7 @@ int main(){
         switch (opcao)
         {
         case 1:
+        //ADICIONA NOVA CONTA
             if(numContas < 10){
                 adiciona_nova_conta(clientes, TAM);
                 numContas++;
@@ -64,14 +65,17 @@ int main(){
             }
             break;
         case 2:{
+            //REMOVE CONTA ESPECIFICA
             if(numContas < 1){
                 std::cout << "nenhuma conta criada.\n";
                 break;
             }
             mostra_clientes_cpf(clientes, TAM);
+
             std::cout << "digite o cpf da conta que deseja remover.\n";
             cpf_filtragens = recebe_cpf_valido_para_filtragem(clientes, TAM);
             auto cliente = encontra_cliente_por_cpf(clientes,TAM,cpf_filtragens);
+            
             if(cliente != nullptr){
                 remove_conta_cliente(*cliente);
                 numContas--;
@@ -81,6 +85,7 @@ int main(){
             break;
         }
         case 3:
+        //LISTA CONTAS CADASTRADAS
             if(numContas < 1){
                 std::cout << "nenhuma conta criada.\n";
                 break;
@@ -89,13 +94,16 @@ int main(){
             break;
 
         case 4:{
+            //IMPRIME CONTA ESPECIFICA
             if(numContas < 1){
                 std::cout << "nenhuma conta criada.\n";
                 break;
             }
+
             std::cout << "digite o cpf da conta que deseja imprimir.\n";
             cpf_filtragens = recebe_cpf_valido_para_filtragem(clientes,TAM);
             auto cliente = encontra_cliente_por_cpf(clientes,TAM,cpf_filtragens);
+
             if(cliente != nullptr){
                 imprime_conta_especifica(*cliente);
             }else{
@@ -104,13 +112,16 @@ int main(){
             break;	
         }
         case 5:{
+            //ATUALIZA DADOS DE UMA CONTA
             if(numContas < 1){
                 std::cout << "nenhuma conta criada.\n";
                 break;
             }
+
             std::cout << "digite o cpf da conta que deseja editar.\n";
             cpf_filtragens = recebe_cpf_valido_para_filtragem(clientes,TAM);
             auto cliente = encontra_cliente_por_cpf(clientes,TAM,cpf_filtragens);
+
             if(cliente != nullptr){
                 atualizar_conta_cliente(clientes, TAM, *cliente);
             }else{
