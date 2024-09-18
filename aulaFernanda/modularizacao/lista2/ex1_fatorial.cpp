@@ -7,6 +7,10 @@ int calculaFatorial(int);
 int main(){
     int n = leNumPositivo();
     int fatN = calculaFatorial(n);
+
+    std::cout << "O fatorial de " << n << " é " << fatN;
+
+    return 0;
 }
 
 int leNumPositivo(){
@@ -18,3 +22,11 @@ int leNumPositivo(){
     } while (n < 0);
     return n;
 };
+
+int calculaFatorial(int num){
+    if(num == 1 || num == 0){
+        return 1;
+    }
+    return num * calculaFatorial(num - 1);
+};
+
