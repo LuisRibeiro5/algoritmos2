@@ -3,6 +3,9 @@
 void preenche_array(int*, int);
 void mostra_array(int*, int);
 int moda_array(int*, int);
+int moda(int*, int);
+void faz_contagem(int*, int*, int&, int);
+int retorna_maior(int*,int);
 
 int main(){
     int tamanho;
@@ -59,4 +62,51 @@ int moda_array(int *arr, int tamanho){
         return -1;
     }
     return num_moda;
+};
+
+int moda(int *arr, int tamanho){
+    int *valores,*contagem;
+    valores = new int[tamanho];
+    contagem = new int [tamanho];
+
+    int tam =0 ;
+    for (int i = 0; i < tamanho; i++){
+        faz_contagem(valores,contagem,tam,arr[i]);
+    }
+
+    int idx_maior = retorna_maior(contagem,tamanho);
+    int moda = valores[idx_maior];
+
+    delete[] valores;
+    delete[] contagem;
+    
+    return moda == 1 ? -1 : moda;
+};
+
+void faz_contagem(int *valores, int *contagem, int &tamanho,int valor){
+    for (int i = 0; i < tamanho; i++){
+        if(valores[i] == valor){
+            contagem[i]++;
+            return;
+        }
+    }
+
+    valores[tamanho] = valor;
+    contagem[tamanho] = 1;
+    tamanho++;
+};
+
+int retorna_maior(int *arr,int tamanho){
+    int max = arr[0];
+    int idx_max = 0;
+
+    for (int i = 1; i < tamanho; i++)
+    {
+        if (arr[i] > max){
+            max = arr[i];
+            idx_max = i;
+        }
+    }
+    
+    return idx_max;
 };
